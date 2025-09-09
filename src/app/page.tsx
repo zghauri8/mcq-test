@@ -7,7 +7,6 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to test generator immediately
     router.push("/test-generate");
   }, [router]);
 
