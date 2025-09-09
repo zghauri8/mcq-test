@@ -1,0 +1,18 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/account/page": "app/account/page.js",
+  "/account/profile/page": "app/account/profile/page.js",
+  "/api-debug/page": "app/api-debug/page.js",
+  "/api-test/page": "app/api-test/page.js",
+  "/auth/callback/page": "app/auth/callback/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/jobs/[id]/page": "app/jobs/[id]/page.js",
+  "/jobs/page": "app/jobs/page.js",
+  "/login/page": "app/login/page.js",
+  "/page": "app/page.js",
+  "/register/page": "app/register/page.js",
+  "/test-generate/page": "app/test-generate/page.js",
+  "/test-results/page": "app/test-results/page.js",
+  "/test-take/page": "app/test-take/page.js"
+}

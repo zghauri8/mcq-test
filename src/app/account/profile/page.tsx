@@ -1,71 +1,85 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone1: string;
+    phone2: string;
+    city: string;
+    state: string;
+    country: string;
+    zip_code: string;
+    address: string;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone1: '',
-    phone2: '',
-    city: '',
-    state: '',
-    country: '',
-    address: '',
-    gender: 'male',
-    dob: '',
-    bio: '',
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone1: "",
+    phone2: "",
+    city: "",
+    state: "",
+    country: "",
+    address: "",
+    gender: "male",
+    dob: "",
+    bio: "",
   });
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      router.push('/login');
+      router.push("/login");
       return;
     }
 
     // Fetch user data
     const fetchUser = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/candidates/me', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+        const response = await fetch(
+          "http://localhost:5000/api/candidates/me",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (response.ok) {
           const userData = await response.json();
           setUser(userData);
           setFormData({
-            first_name: userData.first_name || '',
-            last_name: userData.last_name || '',
-            email: userData.email || '',
-            phone1: userData.phone1 || '',
-            phone2: userData.phone2 || '',
-            city: userData.city || '',
-            state: userData.state || '',
-            country: userData.country || '',
-            address: userData.address || '',
-            gender: userData.gender || 'male',
-            dob: userData.dob || '',
-            bio: userData.bio || '',
+            first_name: userData.first_name || "",
+            last_name: userData.last_name || "",
+            email: userData.email || "",
+            phone1: userData.phone1 || "",
+            phone2: userData.phone2 || "",
+            city: userData.city || "",
+            state: userData.state || "",
+            country: userData.country || "",
+            address: userData.address || "",
+            gender: userData.gender || "male",
+            dob: userData.dob || "",
+            bio: userData.bio || "",
           });
         } else {
-          localStorage.removeItem('token');
-          router.push('/login');
+          localStorage.removeItem("token");
+          router.push("/login");
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
-        localStorage.removeItem('token');
-        router.push('/login');
+        console.error("Error fetching user data:", error);
+        localStorage.removeItem("token");
+        router.push("/login");
       } finally {
         setLoading(false);
       }
@@ -74,10 +88,14 @@ export default function ProfilePage() {
     fetchUser();
   }, [router]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -87,27 +105,30 @@ export default function ProfilePage() {
     setMessage(null);
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/candidates/profile', {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        "http://localhost:5000/api/candidates/profile",
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.ok) {
-        setMessage('Profile updated successfully!');
+        setMessage("Profile updated successfully!");
         // Refresh user data
         const userData = await response.json();
         setUser(userData);
       } else {
         const error = await response.json();
-        setMessage(error.error || 'Failed to update profile');
+        setMessage(error.error || "Failed to update profile");
       }
-    } catch (error) {
-      setMessage('An error occurred while updating profile');
+    } catch (err) {
+      setMessage("An error occurred while updating profile");
     } finally {
       setSaving(false);
     }
@@ -128,7 +149,9 @@ export default function ProfilePage() {
         <div className="container">
           <div className="intro-img"></div>
           <div className="intro-info">
-            <h2><span>Account > Profile</span></h2>
+            <h2>
+              <span>Account &gt; Profile</span>
+            </h2>
           </div>
         </div>
       </section>
@@ -177,10 +200,13 @@ export default function ProfilePage() {
                       </a>
                     </li>
                     <li>
-                      <a href="#" onClick={() => {
-                        localStorage.removeItem('token');
-                        router.push('/');
-                      }}>
+                      <a
+                        href="#"
+                        onClick={() => {
+                          localStorage.removeItem("token");
+                          router.push("/");
+                        }}
+                      >
                         <i className="fas fa-sign-out-alt"></i> Logout
                       </a>
                     </li>
@@ -192,14 +218,23 @@ export default function ProfilePage() {
                   <div className="col-md-12 col-lg-12 col-sm-12">
                     <div className="account-box">
                       <p className="account-box-heading">
-                        <span className="account-box-heading-text">Profile</span>
+                        <span className="account-box-heading-text">
+                          Profile
+                        </span>
                         <span className="account-box-heading-line"></span>
                       </p>
-                      
+
                       <div className="container">
                         <form className="form" onSubmit={handleSubmit}>
                           {message && (
-                            <div className={`alert ${message.includes('success') ? 'alert-success' : 'alert-danger'}`} role="alert">
+                            <div
+                              className={`alert ${
+                                message.includes("success")
+                                  ? "alert-success"
+                                  : "alert-danger"
+                              }`}
+                              role="alert"
+                            >
                               {message}
                             </div>
                           )}
@@ -207,173 +242,205 @@ export default function ProfilePage() {
                             <div className="col-md-6 col-lg-6">
                               <div className="form-group form-group-account">
                                 <label htmlFor="first_name">First Name</label>
-                                <input 
-                                  type="text" 
-                                  className="form-control" 
-                                  placeholder="Adam" 
-                                  name="first_name" 
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Adam"
+                                  name="first_name"
                                   value={formData.first_name}
                                   onChange={handleChange}
                                 />
-                                <small className="form-text text-muted">Enter first name</small>
+                                <small className="form-text text-muted">
+                                  Enter first name
+                                </small>
                               </div>
                               <div className="form-group form-group-account">
                                 <label htmlFor="phone1">Phone 1</label>
-                                <input 
-                                  type="text" 
-                                  className="form-control" 
-                                  placeholder="12345 67891011" 
-                                  name="phone1" 
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="12345 67891011"
+                                  name="phone1"
                                   value={formData.phone1}
                                   onChange={handleChange}
                                 />
-                                <small className="form-text text-muted">Enter phone 1.</small>
+                                <small className="form-text text-muted">
+                                  Enter phone 1.
+                                </small>
                               </div>
                               <div className="form-group form-group-account">
                                 <label htmlFor="city">City</label>
-                                <input 
-                                  type="text" 
-                                  className="form-control" 
-                                  placeholder="New York" 
-                                  name="city" 
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="New York"
+                                  name="city"
                                   value={formData.city}
                                   onChange={handleChange}
                                 />
-                                <small className="form-text text-muted">Enter city</small>
+                                <small className="form-text text-muted">
+                                  Enter city
+                                </small>
                               </div>
                               <div className="form-group form-group-account">
                                 <label htmlFor="country">Country</label>
-                                <input 
-                                  type="text" 
-                                  className="form-control" 
-                                  placeholder="Australia" 
-                                  name="country" 
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Australia"
+                                  name="country"
                                   value={formData.country}
                                   onChange={handleChange}
                                 />
-                                <small className="form-text text-muted">Enter country</small>
+                                <small className="form-text text-muted">
+                                  Enter country
+                                </small>
                               </div>
                               <div className="form-group form-group-account">
                                 <label htmlFor="gender">Gender</label>
-                                <select name="gender" className="form-control" value={formData.gender} onChange={handleChange}>
+                                <select
+                                  name="gender"
+                                  className="form-control"
+                                  value={formData.gender}
+                                  onChange={handleChange}
+                                >
                                   <option value="male">Male</option>
                                   <option value="female">Female</option>
                                   <option value="other">Other</option>
                                 </select>
-                                <small className="form-text text-muted">Select gender</small>
+                                <small className="form-text text-muted">
+                                  Select gender
+                                </small>
                               </div>
                               <div className="form-group form-group-account">
                                 <label htmlFor="dob">Date of Birth</label>
-                                <input 
-                                  type="date" 
-                                  className="form-control" 
-                                  placeholder="1990-10-10" 
-                                  name="dob" 
+                                <input
+                                  type="date"
+                                  className="form-control"
+                                  placeholder="1990-10-10"
+                                  name="dob"
                                   value={formData.dob}
                                   onChange={handleChange}
                                 />
-                                <small className="form-text text-muted">Select date of birth</small>
+                                <small className="form-text text-muted">
+                                  Select date of birth
+                                </small>
                               </div>
                             </div>
                             <div className="col-md-6 col-lg-6">
                               <div className="form-group form-group-account">
                                 <label htmlFor="last_name">Last Name</label>
-                                <input 
-                                  type="text" 
-                                  className="form-control" 
-                                  placeholder="Smith" 
-                                  name="last_name" 
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Smith"
+                                  name="last_name"
                                   value={formData.last_name}
                                   onChange={handleChange}
                                 />
-                                <small className="form-text text-muted">Enter last name.</small>
+                                <small className="form-text text-muted">
+                                  Enter last name.
+                                </small>
                               </div>
                               <div className="form-group form-group-account">
                                 <label htmlFor="email">Email</label>
-                                <input 
-                                  type="text" 
-                                  className="form-control" 
-                                  placeholder="email" 
-                                  name="email" 
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="email"
+                                  name="email"
                                   value={formData.email}
                                   onChange={handleChange}
                                 />
-                                <small className="form-text text-muted">Enter email</small>
+                                <small className="form-text text-muted">
+                                  Enter email
+                                </small>
                               </div>
                               <div className="form-group form-group-account">
                                 <label htmlFor="phone2">Phone 2</label>
-                                <input 
-                                  type="text" 
-                                  className="form-control" 
-                                  placeholder="67891011" 
-                                  name="phone2" 
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="67891011"
+                                  name="phone2"
                                   value={formData.phone2}
                                   onChange={handleChange}
                                 />
-                                <small className="form-text text-muted">Enter phone 2.</small>
+                                <small className="form-text text-muted">
+                                  Enter phone 2.
+                                </small>
                               </div>
                               <div className="form-group form-group-account">
                                 <label htmlFor="state">State</label>
-                                <input 
-                                  type="text" 
-                                  className="form-control" 
-                                  placeholder="New York" 
-                                  name="state" 
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="New York"
+                                  name="state"
                                   value={formData.state}
                                   onChange={handleChange}
                                 />
-                                <small className="form-text text-muted">Enter state</small>
+                                <small className="form-text text-muted">
+                                  Enter state
+                                </small>
                               </div>
                               <div className="form-group form-group-account">
                                 <label htmlFor="address">Address</label>
-                                <input 
-                                  type="text" 
-                                  className="form-control" 
-                                  placeholder="House # 30, Street 32" 
-                                  name="address" 
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="House # 30, Street 32"
+                                  name="address"
                                   value={formData.address}
                                   onChange={handleChange}
                                 />
-                                <small className="form-text text-muted">Enter address</small>
+                                <small className="form-text text-muted">
+                                  Enter address
+                                </small>
                               </div>
                             </div>
                             <div className="col-md-12 col-lg-12">
                               <div className="form-group form-group-account">
                                 <label htmlFor="bio">Short Biography</label>
-                                <textarea 
-                                  className="form-control" 
-                                  placeholder="Short Bio" 
+                                <textarea
+                                  className="form-control"
+                                  placeholder="Short Bio"
                                   name="bio"
                                   value={formData.bio}
                                   onChange={handleChange}
                                   rows={4}
                                 ></textarea>
-                                <small className="form-text text-muted">Enter short biography</small>
+                                <small className="form-text text-muted">
+                                  Enter short biography
+                                </small>
                               </div>
                             </div>
                             <div className="col-md-12 col-lg-12">
                               <div className="form-group form-group-account">
                                 <label htmlFor="image">Image File</label>
-                                <input 
-                                  type="file" 
-                                  className="form-control" 
-                                  name="image" 
+                                <input
+                                  type="file"
+                                  className="form-control"
+                                  name="image"
                                   accept="image/*"
                                 />
-                                <small className="form-text text-muted">Only jpg or png allowed</small>
+                                <small className="form-text text-muted">
+                                  Only jpg or png allowed
+                                </small>
                               </div>
                             </div>
                           </div>
                           <div className="row">
                             <div className="col-md-12 col-lg-12">
                               <div className="form-group form-group-account">
-                                <button 
-                                  type="submit" 
-                                  className="btn btn-success" 
-                                  title="Save" 
+                                <button
+                                  type="submit"
+                                  className="btn btn-success"
+                                  title="Save"
                                   disabled={saving}
                                 >
-                                  <i className="fa fa-floppy-o"></i> {saving ? 'Saving...' : 'Save'}
+                                  <i className="fa fa-floppy-o"></i>{" "}
+                                  {saving ? "Saving..." : "Save"}
                                 </button>
                               </div>
                             </div>
@@ -391,4 +458,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-

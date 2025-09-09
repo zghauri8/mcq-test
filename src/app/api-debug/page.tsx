@@ -2,8 +2,21 @@
 
 import { useState } from "react";
 
+interface ApiTestResult {
+  name: string;
+  url: string;
+  method: string;
+  status: number | string;
+  statusText: string;
+  success: boolean;
+  contentType: string | null;
+  data: unknown;
+  error: string | null;
+  rawResponse: string | null;
+}
+
 export default function ApiDebugPage() {
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<ApiTestResult[]>([]);
   const [loading, setLoading] = useState(false);
 
   const testAllApis = async () => {
@@ -72,7 +85,7 @@ export default function ApiDebugPage() {
         console.log(`📊 Response OK: ${response.ok}`);
         console.log(`📋 Content-Type: ${response.headers.get("content-type")}`);
 
-        const result = {
+        const result: ApiTestResult = {
           name: testCase.name,
           url: testCase.url,
           method: testCase.method,
@@ -106,7 +119,8 @@ export default function ApiDebugPage() {
         }
 
         testResults.push(result);
-      } catch (error) {
+      } catch (err) {
+        const error = err instanceof Error ? err : new Error("Unknown error");
         console.error(`❌ ${testCase.name} failed:`, error);
         testResults.push({
           name: testCase.name,
@@ -182,7 +196,7 @@ export default function ApiDebugPage() {
                     <strong>Content-Type:</strong> {result.contentType || "N/A"}
                   </p>
 
-                  {result.data && (
+                  {result.data != null && (
                     <div>
                       <p>
                         <strong>JSON Data:</strong>
@@ -220,7 +234,7 @@ export default function ApiDebugPage() {
               📋 Instructions
             </h3>
             <ul className="text-sm text-blue-700 space-y-1">
-              <li>• Click "Test All APIs" to test all endpoints</li>
+              <li>• Click &quot;Test All APIs&quot; to test all endpoints</li>
               <li>• Check the browser console for detailed logs</li>
               <li>• Green = API returned valid JSON</li>
               <li>• Red = API failed or returned HTML/error</li>

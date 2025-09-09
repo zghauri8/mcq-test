@@ -2,8 +2,19 @@
 
 import { useState } from "react";
 
+interface ApiTestResult {
+  name: string;
+  url: string;
+  method: string;
+  status: number;
+  statusText: string;
+  success: boolean;
+  data: unknown;
+  error: string | null;
+}
+
 export default function ApiTestPage() {
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<ApiTestResult[]>([]);
   const [loading, setLoading] = useState(false);
 
   const testEndpoints = async () => {
@@ -80,7 +91,7 @@ export default function ApiTestPage() {
           body: testCase.body ? JSON.stringify(testCase.body) : undefined,
         });
 
-        const result = {
+        const result: ApiTestResult = {
           name: testCase.name,
           url: testCase.url,
           method: testCase.method,
@@ -94,7 +105,7 @@ export default function ApiTestPage() {
         if (response.ok) {
           try {
             result.data = await response.json();
-          } catch (e) {
+          } catch {
             result.data = "Response is not JSON";
           }
         } else {
@@ -185,7 +196,7 @@ export default function ApiTestPage() {
                     </div>
                   )}
 
-                  {result.data && (
+                  {result.data != null && (
                     <div className="text-sm">
                       <strong>Response:</strong>
                       <pre className="mt-1 bg-white p-2 rounded border text-xs overflow-auto max-h-40">
