@@ -111,10 +111,6 @@ export default function TestGeneratePage() {
                 className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-green-300 focus:border-green-500 transition-all duration-200 text-lg"
               >
                 <option value="Communication">💬 Communication</option>
-                <option value="Leadership">👑 Leadership</option>
-                <option value="Problem Solving">🧩 Problem Solving</option>
-                <option value="Teamwork">🤝 Teamwork</option>
-                <option value="Creativity">🎨 Creativity</option>
               </select>
               <p className="text-sm text-gray-600 mt-2">
                 Select the skill area to assess

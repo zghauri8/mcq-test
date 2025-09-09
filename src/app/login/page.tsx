@@ -93,16 +93,14 @@ export default function LoginPage() {
             <div className="text-center mb-8">
               <div className="flex items-center justify-center space-x-3 mb-4">
                 <Image
-                  src="/site-logo.png"
+                  src="/fit-finder-logo-new.png"
                   alt="Fit Finder Logo"
                   width={48}
                   height={48}
                   className="h-12 w-auto"
+                  priority
                 />
-                <div className="flex flex-col">
-                 
-                  
-                </div>
+                <div className="flex flex-col"></div>
               </div>
               <p className="text-gray-600">
                 Sign in to your account to continue

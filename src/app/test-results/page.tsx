@@ -9,17 +9,6 @@ export const dynamic = "force-dynamic";
 
 interface TestResults {
   analysis: Record<string, string>;
-  max_score: number;
-  percentage: number;
-  total_score: number;
-  trait_scores: Record<
-    string,
-    {
-      score: number;
-      max_score: number;
-      percentage: number;
-    }
-  >;
   message?: string;
 }
 
@@ -38,31 +27,6 @@ function TestResultsContent() {
         "Problem Solving": "Excellent",
         Teamwork: "Good",
       },
-      max_score: 100,
-      percentage: 85,
-      total_score: 85,
-      trait_scores: {
-        Communication: {
-          score: 22,
-          max_score: 25,
-          percentage: 88,
-        },
-        Leadership: {
-          score: 18,
-          max_score: 25,
-          percentage: 72,
-        },
-        "Problem Solving": {
-          score: 24,
-          max_score: 25,
-          percentage: 96,
-        },
-        Teamwork: {
-          score: 21,
-          max_score: 25,
-          percentage: 84,
-        },
-      },
       message:
         "Great job! You show strong communication and excellent problem-solving skills.",
     };
@@ -71,20 +35,6 @@ function TestResultsContent() {
     setResults(mockResults);
     setLoading(false);
   }, [userId]);
-
-  const getScoreColor = (percentage: number) => {
-    if (percentage >= 80) return "text-green-600 bg-green-100";
-    if (percentage >= 60) return "text-yellow-600 bg-yellow-100";
-    return "text-red-600 bg-red-100";
-  };
-
-  const getScoreEmoji = (percentage: number) => {
-    if (percentage >= 90) return "🏆";
-    if (percentage >= 80) return "🥇";
-    if (percentage >= 70) return "🥈";
-    if (percentage >= 60) return "🥉";
-    return "📊";
-  };
 
   if (loading) {
     return (
@@ -183,57 +133,13 @@ function TestResultsContent() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Overall Score Card */}
+          {/* Assessment Summary */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-8">
             <div className="p-8">
               <div className="text-center">
                 <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-                  Overall Assessment Score
+                  Assessment Summary
                 </h2>
-
-                {/* Professional Score Display */}
-                <div className="flex items-center justify-center mb-8">
-                  <div className="relative w-32 h-32">
-                    <svg
-                      className="w-32 h-32 transform -rotate-90"
-                      viewBox="0 0 100 100"
-                    >
-                      <circle
-                        cx="50"
-                        cy="50"
-                        r="40"
-                        stroke="#e5e7eb"
-                        strokeWidth="8"
-                        fill="none"
-                      />
-                      <circle
-                        cx="50"
-                        cy="50"
-                        r="40"
-                        stroke="#3b82f6"
-                        strokeWidth="8"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeDasharray={`${2 * Math.PI * 40}`}
-                        strokeDashoffset={`${
-                          2 *
-                          Math.PI *
-                          40 *
-                          (1 - (results?.percentage || 0) / 100)
-                        }`}
-                        className="transition-all duration-1000 ease-out"
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-3xl font-bold text-gray-900">
-                        {results?.percentage || 0}%
-                      </span>
-                      <span className="text-sm text-gray-500">
-                        {results?.total_score || 0}/{results?.max_score || 0}
-                      </span>
-                    </div>
-                  </div>
-                </div>
 
                 <div className="max-w-2xl mx-auto">
                   <h3 className="text-xl font-medium text-gray-900 mb-2">
@@ -257,13 +163,13 @@ function TestResultsContent() {
                     Competency Analysis
                   </h3>
                   <p className="text-gray-600 mt-1">
-                    Detailed breakdown by competency area
+                    Assessment results by competency area
                   </p>
                 </div>
                 <div className="p-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {Object.entries(results.trait_scores).map(
-                      ([trait, data], index) => (
+                    {Object.entries(results.analysis).map(
+                      ([trait, level], index) => (
                         <div
                           key={trait}
                           className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow duration-200"
@@ -272,33 +178,26 @@ function TestResultsContent() {
                             <h4 className="text-lg font-medium text-gray-900">
                               {trait}
                             </h4>
-                            <div className="text-right">
-                              <div className="text-2xl font-bold text-gray-900">
-                                {data.percentage}%
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                {data.score}/{data.max_score} points
-                              </div>
+                            <div
+                              className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                level === "Excellent"
+                                  ? "bg-green-100 text-green-800"
+                                  : level === "Strong"
+                                  ? "bg-blue-100 text-blue-800"
+                                  : level === "Good"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-gray-100 text-gray-800"
+                              }`}
+                            >
+                              {level}
                             </div>
                           </div>
 
-                          {/* Progress bar */}
-                          <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
-                            <div
-                              className={`h-2 rounded-full transition-all duration-1000 ${
-                                data.percentage >= 80
-                                  ? "bg-green-500"
-                                  : data.percentage >= 60
-                                  ? "bg-yellow-500"
-                                  : "bg-red-500"
-                              }`}
-                              style={{ width: `${data.percentage}%` }}
-                            ></div>
-                          </div>
-
                           <div className="text-sm text-gray-600">
-                            <span className="font-medium">Assessment:</span>{" "}
-                            {results.analysis[trait]}
+                            <span className="font-medium">
+                              Assessment Level:
+                            </span>{" "}
+                            {level}
                           </div>
                         </div>
                       )

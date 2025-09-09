@@ -12,7 +12,6 @@ interface Question {
   question?: string;
   question_no?: number;
   options: Array<{
-    score: number;
     text: string;
   }>;
 }
@@ -97,55 +96,55 @@ function TestTakeContent() {
           question: "I feel confident expressing my ideas in a group setting.",
           question_no: 1,
           options: [
-            { score: 5, text: "Strongly Agree" },
-            { score: 4, text: "Agree" },
-            { score: 3, text: "Neutral" },
-            { score: 2, text: "Disagree" },
-            { score: 1, text: "Strongly Disagree" },
+            { text: "Strongly Agree" },
+            { text: "Agree" },
+            { text: "Neutral" },
+            { text: "Disagree" },
+            { text: "Strongly Disagree" },
           ],
         },
         {
           question: "I enjoy working with others to solve complex problems.",
           question_no: 2,
           options: [
-            { score: 5, text: "Strongly Agree" },
-            { score: 4, text: "Agree" },
-            { score: 3, text: "Neutral" },
-            { score: 2, text: "Disagree" },
-            { score: 1, text: "Strongly Disagree" },
+            { text: "Strongly Agree" },
+            { text: "Agree" },
+            { text: "Neutral" },
+            { text: "Disagree" },
+            { text: "Strongly Disagree" },
           ],
         },
         {
           question: "I can easily adapt to new situations and challenges.",
           question_no: 3,
           options: [
-            { score: 5, text: "Strongly Agree" },
-            { score: 4, text: "Agree" },
-            { score: 3, text: "Neutral" },
-            { score: 2, text: "Disagree" },
-            { score: 1, text: "Strongly Disagree" },
+            { text: "Strongly Agree" },
+            { text: "Agree" },
+            { text: "Neutral" },
+            { text: "Disagree" },
+            { text: "Strongly Disagree" },
           ],
         },
         {
           question: "I am comfortable taking initiative in team projects.",
           question_no: 4,
           options: [
-            { score: 5, text: "Strongly Agree" },
-            { score: 4, text: "Agree" },
-            { score: 3, text: "Neutral" },
-            { score: 2, text: "Disagree" },
-            { score: 1, text: "Strongly Disagree" },
+            { text: "Strongly Agree" },
+            { text: "Agree" },
+            { text: "Neutral" },
+            { text: "Disagree" },
+            { text: "Strongly Disagree" },
           ],
         },
         {
           question: "I prefer to work independently rather than in groups.",
           question_no: 5,
           options: [
-            { score: 1, text: "Strongly Agree" },
-            { score: 2, text: "Agree" },
-            { score: 3, text: "Neutral" },
-            { score: 4, text: "Disagree" },
-            { score: 5, text: "Strongly Disagree" },
+            { text: "Strongly Agree" },
+            { text: "Agree" },
+            { text: "Neutral" },
+            { text: "Disagree" },
+            { text: "Strongly Disagree" },
           ],
         },
       ],
@@ -217,31 +216,6 @@ function TestTakeContent() {
           "Problem Solving": "Excellent",
           Teamwork: "Good",
         },
-        max_score: 100,
-        percentage: 85,
-        total_score: 85,
-        trait_scores: {
-          Communication: {
-            score: 22,
-            max_score: 25,
-            percentage: 88,
-          },
-          Leadership: {
-            score: 18,
-            max_score: 25,
-            percentage: 72,
-          },
-          "Problem Solving": {
-            score: 24,
-            max_score: 25,
-            percentage: 96,
-          },
-          Teamwork: {
-            score: 21,
-            max_score: 25,
-            percentage: 84,
-          },
-        },
         message:
           "Great job! You show strong communication and excellent problem-solving skills. (Demo Mode)",
       };
@@ -301,11 +275,12 @@ function TestTakeContent() {
               <div>
                 <div className="flex items-center mb-3">
                   <Image
-                    src="/site-logo.png"
+                    src="/fit-finder-logo-new.png"
                     alt="Candidate Finder Logo"
                     width={48}
                     height={48}
                     className="h-12 w-auto mr-4"
+                    priority
                   />
                   <div className="flex flex-col mr-4">
                     <span className="text-sm text-blue-500 font-medium leading-none">
@@ -392,9 +367,6 @@ function TestTakeContent() {
                         <div className="ml-4 flex-1">
                           <span className="text-gray-800 font-medium">
                             {option.text}
-                          </span>
-                          <span className="ml-2 text-sm text-gray-500">
-                            (Score: {option.score})
                           </span>
                         </div>
                         {answers[questionIndex.toString()] === option.text && (
