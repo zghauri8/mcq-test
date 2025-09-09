@@ -1,23 +1,29 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+
+// Force dynamic rendering
+export const dynamic = "force-dynamic";
 
 interface TestResults {
   analysis: Record<string, string>;
   max_score: number;
   percentage: number;
   total_score: number;
-  trait_scores: Record<string, {
-    score: number;
-    max_score: number;
-    percentage: number;
-  }>;
+  trait_scores: Record<
+    string,
+    {
+      score: number;
+      max_score: number;
+      percentage: number;
+    }
+  >;
   message?: string;
 }
 
-export default function TestResultsPage() {
+function TestResultsContent() {
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId") || "123456";
   const [results, setResults] = useState<TestResults | null>(null);
@@ -479,5 +485,27 @@ export default function TestResultsPage() {
         </div>
       </div>
     </>
+  );
+}
+
+export default function TestResultsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              Loading Results...
+            </h2>
+            <p className="text-gray-600">
+              Please wait while we load your test results.
+            </p>
+          </div>
+        </div>
+      }
+    >
+      <TestResultsContent />
+    </Suspense>
   );
 }

@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+
+// Force dynamic rendering
+export const dynamic = "force-dynamic";
 
 interface Question {
   question?: string;
@@ -18,7 +21,7 @@ interface TestData {
   questions: Question[];
 }
 
-export default function TestTakePage() {
+function TestTakeContent() {
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId") || "1234";
   const documentId = searchParams.get("documentId") || "demo123";
@@ -515,5 +518,27 @@ export default function TestTakePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function TestTakePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              Loading Test...
+            </h2>
+            <p className="text-gray-600">
+              Please wait while we load your test.
+            </p>
+          </div>
+        </div>
+      }
+    >
+      <TestTakeContent />
+    </Suspense>
   );
 }
